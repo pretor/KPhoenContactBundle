@@ -14,6 +14,16 @@ class ContactController extends BaseContactController
     public function contactAction(Request $request)
     {
         list($message, $form) = $this->getContactForm();
+        
+            if ($request->isMethod('POST') && $request->query->get('ajax')) {
+            $res = $this->handleContactForm($request, $form, $message);
+            if($res == null){
+                return new Response('fail');
+            }
+            else{
+                return new Response('success');
+            }
+          }
 
         if ($request->isMethod('POST') && ($res = $this->handleContactForm($request, $form, $message)) !== null) {
             return $res;
